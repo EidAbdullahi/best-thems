@@ -68,5 +68,11 @@ urlpatterns = [
     path('admin/messages/<int:pk>/mark-read/', views.admin_message_mark_read, name='admin_message_mark_read'),
     path('admin/messages/mark-all-read/', views.admin_message_mark_all_read, name='admin_message_mark_all_read'),
     path('hero-stats/<int:pk>/toggle/', views.admin_hero_stat_toggle, name='admin_hero_stat_toggle'),
-path('why-us/<int:pk>/toggle/', views.admin_why_us_toggle, name='admin_why_us_toggle'),
+    path('why-us/<int:pk>/toggle/', views.admin_why_us_toggle, name='admin_why_us_toggle'),
+        # Videos
+    path('admin/videos/', views.admin_videos, name='admin_videos'),
+    path('admin/videos/add/', views.admin_video_add, name='admin_video_add'),
+    path('admin/videos/<int:pk>/edit/', views.admin_video_edit, name='admin_video_edit'),
+    path('admin/videos/<int:pk>/delete/', views.admin_video_delete, name='admin_video_delete'),
+    path('admin/videos/<int:pk>/toggle/', views.admin_video_toggle, name='admin_video_toggle'),
 ]

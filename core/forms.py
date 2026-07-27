@@ -1,6 +1,10 @@
 from django import forms
 from django.core.validators import RegexValidator
-from .models import ContactMessage
+from .models import (
+    SiteSettings, HeroStat, Service, AboutSection, AboutFeature,
+    Sector, WhyChooseUs, Partner, Testimonial, ContactMessage,
+    Video  # <-- ADD THIS
+)
 
 
 class ContactForm(forms.ModelForm):
@@ -64,13 +68,6 @@ class ContactForm(forms.ModelForm):
         if len(message) < 10:
             raise forms.ValidationError("Please provide more details (at least 10 characters).")
         return message
-
-from django import forms
-from django.core.validators import RegexValidator
-from .models import (
-    SiteSettings, HeroStat, Service, AboutSection, AboutFeature,
-    Sector, WhyChooseUs, Partner, Testimonial, ContactMessage
-)
 
 
 class SiteSettingsForm(forms.ModelForm):
@@ -206,6 +203,31 @@ class AboutSectionForm(forms.ModelForm):
             'content_paragraph2': forms.Textarea(attrs={'class': 'admin-textarea', 'rows': 5}),
             'experience_years': forms.NumberInput(attrs={'class': 'admin-input'}),
             'experience_text': forms.TextInput(attrs={'class': 'admin-input'}),
+        }
+
+
+class VideoForm(forms.ModelForm):
+    """Form for videos."""
+
+    class Meta:
+        model = Video
+        fields = [
+            'title', 'description', 'video_file', 
+            'external_url', 'thumbnail', 'is_featured', 
+            'order', 'is_active'
+        ]
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'admin-input'}),
+            'description': forms.Textarea(attrs={'class': 'admin-textarea', 'rows': 3}),
+            'external_url': forms.URLInput(attrs={
+                'class': 'admin-input',
+                'placeholder': 'https://www.youtube.com/embed/VIDEO_ID'
+            }),
+            'order': forms.NumberInput(attrs={'class': 'admin-input'}),
+        }
+        help_texts = {
+            'external_url': 'Use embed URL for YouTube/Vimeo, or a direct MP4 link.',
+            'video_file': 'Max 50MB. MP4 or WebM recommended.',
         }
 
 

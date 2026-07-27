@@ -83,6 +83,10 @@
                     <span class="nav-icon">&#8505;</span>
                     <span>About Section</span>
                 </a>
+                <a href="{% url 'admin_videos' %}" class="nav-item {% if url_name in 'admin_videos,admin_video_add,admin_video_edit' %}active{% endif %}">
+    <span class="nav-icon">&#127909;</span>
+    <span>Videos</span>
+</a>
                 <a href="{% url 'admin_messages' %}" class="nav-item {% if url_name in 'admin_messages,admin_message_detail' %}active{% endif %}">
                     <span class="nav-icon">&#128231;</span>
                     <span>Messages</span>

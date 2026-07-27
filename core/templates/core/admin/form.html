@@ -8,8 +8,7 @@
         <h1>{{ title }}</h1>
         <p style="color: var(--gray-dark); font-size: 0.9rem; margin-top: 0.25rem;">Fill in the details below</p>
     </div>
-    <a href="{% url 'admin_dashboard' %}" class="btn-secondary">&larr; Back</a>
-</div>
+<a href="{% url back_url|default:'admin_dashboard' %}" class="btn-secondary">&larr; Back</a></div>
 
 <div class="dashboard-card">
     <form method="post" enctype="multipart/form-data" class="admin-form">
@@ -30,8 +29,7 @@
         </div>
         <div class="form-actions">
             <button type="submit" class="btn-primary">Save</button>
-            <a href="{% url 'admin_dashboard' %}" class="btn-secondary">Cancel</a>
-        </div>
+<a href="{% url back_url|default:'admin_dashboard' %}" class="btn-secondary">Cancel</a>        </div>
     </form>
 </div>
 {% endblock %}

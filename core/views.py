@@ -36,7 +36,16 @@ from .forms import (
     AboutFeatureForm, SectorForm, WhyChooseUsForm, PartnerForm,
     TestimonialForm
 )
-
+from .models import (
+    SiteSettings, HeroStat, Service, AboutSection, AboutFeature,
+    Sector, WhyChooseUs, Partner, Testimonial, ContactMessage,
+    Video  # <-- ADD THIS
+)
+from .forms import (
+    SiteSettingsForm, HeroStatForm, ServiceForm, AboutSectionForm,
+    AboutFeatureForm, SectorForm, WhyChooseUsForm, PartnerForm,
+    TestimonialForm, VideoForm  # <-- ADD VideoForm
+)
 
 def is_staff(user):
     return user.is_staff or user.is_superuser
@@ -77,7 +86,9 @@ def admin_dashboard(request):
     unread_messages = ContactMessage.objects.filter(is_read=False).count()
     active_services = Service.objects.filter(is_active=True).count()
     active_sectors = Sector.objects.filter(is_active=True).count()
+    active_videos = Video.objects.filter(is_active=True).count()
 
+    # THIS WAS MISSING — recent inquiries in last 7 days
     last_week = timezone.now() - timedelta(days=7)
     recent_inquiries = ContactMessage.objects.filter(created_at__gte=last_week).count()
 
@@ -100,14 +111,14 @@ def admin_dashboard(request):
         'unread_messages': unread_messages,
         'active_services': active_services,
         'active_sectors': active_sectors,
-        'recent_inquiries': recent_inquiries,
+        'active_videos': active_videos,
+        'recent_inquiries': recent_inquiries,  # <-- NOW DEFINED
         'sector_stats': sector_stats,
         'recent_messages': recent_messages,
-        'trend_labels': json.dumps(trend_labels),  # ← CRITICAL FIX
-        'trend_data': json.dumps(trend_data),      # ← CRITICAL FIX
+        'trend_labels': json.dumps(trend_labels),
+        'trend_data': json.dumps(trend_data),
     }
     return render(request, 'core/admin/dashboard.html', context)
-
 
 
 # ===== SITE SETTINGS =====
@@ -632,7 +643,6 @@ def get_site_settings():
 
 
 def get_home_context(site_settings=None, form=None):
-    """Build context dict for home page - DRY principle."""
     if site_settings is None:
         site_settings = get_site_settings()
 
@@ -645,9 +655,9 @@ def get_home_context(site_settings=None, form=None):
         'why_us': WhyChooseUs.objects.filter(is_active=True),
         'partners': Partner.objects.filter(is_active=True),
         'testimonials': Testimonial.objects.filter(is_active=True),
+        'videos': Video.objects.filter(is_active=True),  # <-- ADD THIS
         'form': form or ContactForm(),
     }
-
 
 def validate_phone_number(phone):
     """Validate phone number format."""
@@ -861,3 +871,60 @@ def admin_why_us_toggle(request, pk):
     item.is_active = not item.is_active
     item.save()
     return JsonResponse({'status': 'success', 'is_active': item.is_active})
+
+# ===== VIDEOS =====
+
+@login_required
+@user_passes_test(is_staff)
+def admin_videos(request):
+    videos = Video.objects.all()
+    return render(request, 'core/admin/videos.html', {'videos': videos})
+
+
+@login_required
+@user_passes_test(is_staff)
+def admin_video_add(request):
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Video added!')
+            return redirect('admin_videos')
+    else:
+        form = VideoForm()
+    return render(request, 'core/admin/form.html', {'form': form, 'title': 'Add Video'})
+
+
+@login_required
+@user_passes_test(is_staff)
+def admin_video_edit(request, pk):
+    video = get_object_or_404(Video, pk=pk)
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES, instance=video)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Video updated!')
+            return redirect('admin_videos')
+    else:
+        form = VideoForm(instance=video)
+    return render(request, 'core/admin/form.html', {'form': form, 'title': 'Edit Video'})
+
+
+@login_required
+@user_passes_test(is_staff)
+@require_POST
+def admin_video_delete(request, pk):
+    video = get_object_or_404(Video, pk=pk)
+    video.delete()
+    messages.success(request, 'Video deleted!')
+    return redirect('admin_videos')
+
+
+@login_required
+@user_passes_test(is_staff)
+@require_POST
+def admin_video_toggle(request, pk):
+    video = get_object_or_404(Video, pk=pk)
+    video.is_active = not video.is_active
+    video.save()
+    return JsonResponse({'status': 'success', 'is_active': video.is_active})

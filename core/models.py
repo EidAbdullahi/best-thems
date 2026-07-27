@@ -265,3 +265,44 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.email}"
+
+class Video(models.Model):
+    """Videos gallery — operations, training, drone footage, testimonials"""
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    video_file = models.FileField(
+        upload_to='videos/', 
+        blank=True, 
+        null=True,
+        help_text="Upload MP4/WebM directly (optional if using external URL)"
+    )
+    external_url = models.URLField(
+        blank=True,
+        help_text="YouTube embed URL: https://www.youtube.com/embed/VIDEO_ID"
+    )
+    thumbnail = models.ImageField(
+        upload_to='videos/thumbnails/', 
+        blank=True, 
+        null=True
+    )
+    is_featured = models.BooleanField(
+        default=False, 
+        help_text="Featured video appears larger at the top"
+    )
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', '-is_featured', 'id']
+        verbose_name = "Video"
+        verbose_name_plural = "Videos"
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def display_url(self):
+        """Returns the URL to use in the template"""
+        if self.video_file:
+            return self.video_file.url
+        return self.external_url or ''
