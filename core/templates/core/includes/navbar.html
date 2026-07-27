@@ -1,0 +1,40 @@
+{% load static %}
+<nav class="navbar" id="navbar">
+    <a href="{% url 'home' %}" class="logo">
+        <div class="logo-icon">
+            <svg viewBox="0 0 100 100">
+                <path d="M50 5 L85 30 L85 70 L50 95 L15 70 L15 30 Z" fill="none" stroke="#D4AF37" stroke-width="2"/>
+                <path d="M50 20 L70 35 L70 60 L50 75 L30 60 L30 35 Z" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+                <path d="M50 35 L60 42 L60 55 L50 62 L40 55 L40 42 Z" fill="#D4AF37"/>
+                <path d="M50 5 L50 20 M50 75 L50 95 M15 30 L30 35 M70 35 L85 30 M15 70 L30 60 M70 60 L85 70" stroke="#D4AF37" stroke-width="1"/>
+            </svg>
+        </div>
+        <div class="logo-text">EAGLE <span>SECURITY</span></div>
+    </a>
+    <ul class="nav-links">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'home' %}#about">About</a></li>
+        <li><a href="{% url 'home' %}#services">Services</a></li>
+        <li><a href="{% url 'home' %}#sectors">Sectors</a></li>
+        <li><a href="{% url 'home' %}#partners">Partners</a></li>
+        <li><a href="{% url 'home' %}#contact">Contact</a></li>
+        <li><a href="{% url 'admin_login' %}" class="nav-admin-link">Admin</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Protection</button>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+<div class="mobile-nav" id="mobileNav">
+    <ul>
+        <li><a href="{% url 'home' %}" onclick="toggleMobileMenu()">Home</a></li>
+        <li><a href="{% url 'home' %}#about" onclick="toggleMobileMenu()">About</a></li>
+        <li><a href="{% url 'home' %}#services" onclick="toggleMobileMenu()">Services</a></li>
+        <li><a href="{% url 'home' %}#sectors" onclick="toggleMobileMenu()">Sectors</a></li>
+        <li><a href="{% url 'home' %}#partners" onclick="toggleMobileMenu()">Partners</a></li>
+        <li><a href="{% url 'home' %}#contact" onclick="toggleMobileMenu()">Contact</a></li>
+        <li><a href="{% url 'admin_login' %}" onclick="toggleMobileMenu()" class="nav-admin-link">Admin</a></li>
+    </ul>
+</div>

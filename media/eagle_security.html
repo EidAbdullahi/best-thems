@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eagle Security Service | Elite Private Protection</title>
+    <meta name="description" content="Eagle Security Service - Elite private security solutions for corporate, residential, healthcare, and government sectors. 24/7 protection with trained professionals.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F0D878;
+            --gold-dark: #B8960C;
+            --gold-glow: rgba(212,175,55,0.12);
+            --navy: #0A0F1A;
+            --navy-light: #0F1629;
+            --navy-lighter: #151D35;
+            --navy-card: #0D1321;
+            --accent-red: #C41E3A;
+            --white: #F8F9FC;
+            --gray: #8B95A8;
+            --gray-light: #A8B2C4;
+            --gray-dark: #5A6270;
+            --glass: rgba(10, 15, 26, 0.72);
+            --border-subtle: rgba(212,175,55,0.08);
+            --border-hover: rgba(212,175,55,0.25);
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.3);
+            --shadow-gold: 0 0 40px rgba(212,175,55,0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection { background: var(--gold); color: var(--navy); }
+
+        #particle-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+
+        .cursor-dot {
+            position: fixed; width: 6px; height: 6px;
+            background: var(--gold); border-radius: 50%;
+            pointer-events: none; z-index: 9999;
+            transition: transform 0.08s ease;
+            mix-blend-mode: difference;
+        }
+        .cursor-ring {
+            position: fixed; width: 36px; height: 36px;
+            border: 1.5px solid var(--gold); border-radius: 50%;
+            pointer-events: none; z-index: 9998;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            mix-blend-mode: difference;
+        }
+        @media (pointer: coarse) {
+            .cursor-dot, .cursor-ring { display: none !important; }
+        }
+
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1.25rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: transparent;
+        }
+        .navbar.scrolled {
+            background: var(--glass);
+            backdrop-filter: blur(24px) saturate(1.8);
+            -webkit-backdrop-filter: blur(24px) saturate(1.8);
+            padding: 0.75rem 5%;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.25);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+        .logo-icon { width: 40px; height: 40px; position: relative; flex-shrink: 0; }
+        .logo-icon svg { width: 100%; height: 100%; filter: drop-shadow(0 0 8px var(--gold-glow)); }
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem;
+            font-weight: 700; color: var(--white); letter-spacing: 1px;
+        }
+        .logo-text span { color: var(--gold); font-weight: 600; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+        .nav-links a {
+            font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500;
+            color: var(--gray); text-decoration: none;
+            letter-spacing: 0.5px; position: relative; padding: 0.25rem 0;
+            transition: color 0.3s ease;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -2px; left: 0;
+            width: 0; height: 1.5px; background: var(--gold);
+            transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1px;
+        }
+        .nav-links a:hover { color: var(--gold-light); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-cta {
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 600;
+            padding: 0.65rem 1.6rem; background: transparent; border: 1.5px solid var(--gold);
+            color: var(--gold); text-transform: uppercase; letter-spacing: 1.5px;
+            cursor: pointer; position: relative; overflow: hidden; transition: all 0.4s ease;
+            border-radius: var(--radius-sm);
+        }
+        .nav-cta::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%; background: var(--gold);
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: -1;
+        }
+        .nav-cta:hover { color: var(--navy); box-shadow: 0 0 25px rgba(212,175,55,0.35); }
+        .nav-cta:hover::before { left: 0; }
+        .mobile-menu-btn {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; z-index: 1001; background: none; border: none; padding: 0.5rem;
+        }
+        .mobile-menu-btn span { width: 26px; height: 2px; background: var(--gold); transition: all 0.3s ease; display: block; border-radius: 1px; }
+        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            position: relative; padding: 8rem 5% 4rem; overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .hero-eagle-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+        }
+        .hero-eagle-img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 30%;
+            filter: grayscale(30%) brightness(0.35) contrast(1.1);
+            transform: scale(1.1);
+            animation: eagleFloat 20s ease-in-out infinite;
+        }
+        @keyframes eagleFloat {
+            0%, 100% { transform: scale(1.1) translateY(0); }
+            50% { transform: scale(1.12) translateY(-8px); }
+        }
+        .hero-eagle-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(212,175,55,0.08) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 20%, rgba(196,30,58,0.05) 0%, transparent 50%),
+                linear-gradient(180deg, rgba(10,15,26,0.7) 0%, rgba(10,15,26,0.5) 40%, rgba(15,22,41,0.85) 100%);
+            z-index: 2;
+        }
+        .hero-grid {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(212,175,55,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212,175,55,0.025) 1px, transparent 1px);
+            background-size: 80px 80px; z-index: 1;
+            animation: gridMove 25s linear infinite;
+        }
+        @keyframes gridMove { 0% { transform: translate(0, 0); } 100% { transform: translate(80px, 80px); } }
+        .hero-content { position: relative; z-index: 2; text-align: center; max-width: 860px; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1.2rem; background: rgba(212,175,55,0.08);
+            border: 1px solid rgba(212,175,55,0.2); border-radius: 50px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 500;
+            color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase;
+            margin-bottom: 2rem; animation: fadeInDown 1s ease;
+        }
+        .hero-badge .pulse { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.4); } }
+        .hero-title { 
+            font-family: 'Space Grotesk', sans-serif; 
+            font-size: clamp(2.8rem, 7vw, 5.5rem); 
+            font-weight: 700; 
+            line-height: 1.05; 
+            margin-bottom: 1.5rem; 
+            letter-spacing: -1.5px; 
+        }
+        .hero-title .line1 { 
+            display: block; 
+            color: var(--white); 
+            animation: fadeInUp 1s ease 0.2s both; 
+        }
+        .hero-title .line2 { 
+            display: block; 
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 60%, var(--gold) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: fadeInUp 1s ease 0.4s both; 
+        }
+        .hero-subtitle { 
+            font-family: 'DM Sans', sans-serif; 
+            font-size: clamp(1rem, 1.8vw, 1.2rem); 
+            color: var(--gray); 
+            max-width: 580px; 
+            margin: 0 auto 2.5rem; 
+            line-height: 1.75; 
+            font-weight: 400;
+            animation: fadeInUp 1s ease 0.6s both; 
+        }
+        .hero-cta-group { 
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; 
+            animation: fadeInUp 1s ease 0.8s both; 
+        }
+        .btn-primary { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600; 
+            padding: 1rem 2.2rem; background: var(--gold); color: var(--navy); 
+            border: none; text-transform: uppercase; letter-spacing: 1.5px; 
+            cursor: pointer; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            border-radius: var(--radius-sm); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-primary:hover { background: var(--gold-light); box-shadow: 0 0 35px rgba(212,175,55,0.4); transform: translateY(-2px); }
+        .btn-secondary { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600; 
+            padding: 1rem 2.2rem; background: transparent; color: var(--white); 
+            border: 1.5px solid rgba(255,255,255,0.12); text-transform: uppercase; letter-spacing: 1.5px; 
+            cursor: pointer; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            border-radius: var(--radius-sm); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-secondary:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); background: rgba(212,175,55,0.05); }
+        .hero-stats { display: flex; justify-content: center; gap: 3.5rem; margin-top: 4rem; animation: fadeInUp 1s ease 1s both; flex-wrap: wrap; }
+        .stat-item { text-align: center; }
+        .stat-number { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; 
+            color: var(--gold); display: block; letter-spacing: -1px;
+        }
+        .stat-label { 
+            font-family: 'DM Sans', sans-serif; font-size: 0.75rem; color: var(--gray-dark); 
+            text-transform: uppercase; letter-spacing: 2px; font-weight: 500;
+        }
+        .scroll-indicator { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; animation: bounce 2.5s infinite; }
+        .scroll-indicator span { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--gray-dark); letter-spacing: 3px; text-transform: uppercase; }
+        .scroll-line { width: 1px; height: 35px; background: linear-gradient(to bottom, var(--gold), transparent); border-radius: 1px; }
+        @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+        section { position: relative; z-index: 2; padding: 6rem 5%; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-label { 
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 500; 
+            color: var(--gold); text-transform: uppercase; letter-spacing: 3px; 
+            margin-bottom: 1rem; display: inline-block; position: relative; 
+        }
+        .section-label::before, .section-label::after { content: ''; position: absolute; top: 50%; width: 30px; height: 1px; background: var(--gold); opacity: 0.4; }
+        .section-label::before { right: calc(100% + 12px); }
+        .section-label::after { left: calc(100% + 12px); }
+        .section-title { 
+            font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4.5vw, 3.2rem); 
+            font-weight: 700; color: var(--white); margin-bottom: 1rem; line-height: 1.15; 
+            letter-spacing: -1px;
+        }
+        .section-desc { 
+            font-family: 'DM Sans', sans-serif; font-size: 1.05rem; color: var(--gray); 
+            max-width: 560px; margin: 0 auto; font-weight: 400; line-height: 1.7;
+        }
+
+        .services { background: var(--navy-light); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+        .service-card {
+            background: var(--navy-card); border: 1px solid var(--border-subtle);
+            position: relative; overflow: hidden; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; border-radius: var(--radius-md);
+        }
+        .service-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 2px; background: linear-gradient(90deg, var(--gold), transparent);
+            transform: scaleX(0); transform-origin: left; transition: transform 0.5s ease; z-index: 2;
+        }
+        .service-card:hover { 
+            border-color: var(--border-hover); 
+            transform: translateY(-8px); 
+            box-shadow: var(--shadow-md), var(--shadow-gold);
+        }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-card .service-img {
+            width: 100%; height: 190px; object-fit: cover;
+            filter: grayscale(50%) brightness(0.6);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .service-card:hover .service-img { filter: grayscale(0%) brightness(0.85); transform: scale(1.05); }
+        .service-card .service-img-wrap { overflow: hidden; position: relative; }
+        .service-card .service-img-wrap::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60px;
+            background: linear-gradient(to top, var(--navy-card), transparent); z-index: 1;
+        }
+        .service-card-content { padding: 0 1.75rem 2rem; }
+        .service-icon { width: 44px; height: 44px; margin-bottom: 1rem; position: relative; }
+        .service-icon svg { width: 100%; height: 100%; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+        .service-card h3 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; font-weight: 600; 
+            color: var(--white); margin-bottom: 0.6rem; letter-spacing: -0.3px; 
+        }
+        .service-card p { 
+            color: var(--gray); font-size: 0.9rem; line-height: 1.7; margin-bottom: 1.25rem; 
+            font-weight: 400;
+        }
+        .service-link { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 600; 
+            color: var(--gold); text-decoration: none; text-transform: uppercase; 
+            letter-spacing: 1.5px; display: inline-flex; align-items: center; gap: 0.5rem; 
+            transition: gap 0.3s ease; 
+        }
+        .service-link:hover { gap: 0.85rem; }
+        .service-link svg { width: 14px; height: 14px; stroke: var(--gold); fill: none; stroke-width: 2.5; }
+
+        .about { background: var(--navy); overflow: hidden; }
+        .about-container { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1200px; margin: 0 auto; align-items: center; }
+        .about-visual { position: relative; }
+        .about-visual .frame { position: relative; width: 100%; aspect-ratio: 4/5; border: 1.5px solid rgba(212,175,55,0.3); overflow: hidden; border-radius: var(--radius-md); }
+        .about-visual .frame::before { content: ''; position: absolute; top: -1px; left: -1px; width: 35px; height: 35px; border-top: 3px solid var(--gold); border-left: 3px solid var(--gold); z-index: 2; border-radius: 2px 0 0 0; }
+        .about-visual .frame::after { content: ''; position: absolute; bottom: -1px; right: -1px; width: 35px; height: 35px; border-bottom: 3px solid var(--gold); border-right: 3px solid var(--gold); z-index: 2; border-radius: 0 0 2px 0; }
+        .about-visual .frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(25%) contrast(1.05); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: block; }
+        .about-visual:hover .frame img { filter: grayscale(0%) contrast(1); transform: scale(1.03); }
+        .about-visual .experience-badge { 
+            position: absolute; bottom: -18px; right: -18px; 
+            background: var(--gold); color: var(--navy); 
+            padding: 1.25rem 1.75rem; 
+            font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-align: center; 
+            border-radius: var(--radius-sm); z-index: 3; 
+            box-shadow: 0 10px 30px rgba(212,175,55,0.3);
+        }
+        .about-visual .experience-badge .num { font-size: 2.2rem; display: block; line-height: 1; letter-spacing: -1px; }
+        .about-visual .experience-badge .text { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+        .about-content h2 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 2.4rem; font-weight: 700; 
+            margin-bottom: 1.25rem; line-height: 1.15; letter-spacing: -1px;
+        }
+        .about-content h2 span { color: var(--gold); }
+        .about-content p { color: var(--gray); margin-bottom: 1.25rem; line-height: 1.75; font-weight: 400; }
+        .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.75rem; }
+        .about-feature { display: flex; align-items: flex-start; gap: 0.875rem; }
+        .about-feature .check { 
+            width: 22px; height: 22px; min-width: 22px; 
+            background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.3); 
+            display: flex; align-items: center; justify-content: center; 
+            margin-top: 2px; border-radius: 4px; 
+        }
+        .about-feature .check svg { width: 12px; height: 12px; stroke: var(--gold); fill: none; stroke-width: 3; }
+        .about-feature h4 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600; 
+            color: var(--white); margin-bottom: 0.2rem; letter-spacing: -0.2px;
+        }
+        .about-feature p { font-size: 0.85rem; color: var(--gray-dark); margin: 0; }
+
+        .sectors { background: var(--navy-light); }
+        .sectors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; max-width: 1200px; margin: 0 auto; }
+        .sector-card {
+            background: var(--navy); border: 1px solid var(--border-subtle);
+            position: relative; overflow: hidden; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; border-radius: var(--radius-md);
+        }
+        .sector-card .sector-img {
+            width: 100%; height: 150px; object-fit: cover;
+            filter: grayscale(55%) brightness(0.55);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sector-card:hover .sector-img { filter: grayscale(0%) brightness(0.75); transform: scale(1.05); }
+        .sector-card .sector-img-wrap { overflow: hidden; position: relative; }
+        .sector-card .sector-img-wrap::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: linear-gradient(to top, var(--navy), transparent); z-index: 1;
+        }
+        .sector-card-content { padding: 0 1.25rem 1.5rem; text-align: center; position: relative; z-index: 2; margin-top: -28px; }
+        .sector-card .sector-icon {
+            width: 48px; height: 48px; margin: 0 auto 0.75rem;
+            background: var(--navy); border: 1px solid rgba(212,175,55,0.25);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            position: relative; z-index: 3;
+        }
+        .sector-card .sector-icon svg { width: 22px; height: 22px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+        .sector-card h3 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600; 
+            color: var(--white); margin-bottom: 0.4rem; letter-spacing: -0.2px; 
+        }
+        .sector-card p { font-size: 0.85rem; color: var(--gray-dark); line-height: 1.6; }
+        .sector-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 0;
+            background: linear-gradient(to top, rgba(212,175,55,0.08), transparent);
+            transition: height 0.5s ease;
+        }
+        .sector-card:hover { border-color: var(--border-hover); transform: translateY(-5px); }
+        .sector-card:hover::after { height: 100%; }
+
+        .why-us { background: var(--navy); position: relative; }
+        .why-us::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.04) 0%, transparent 60%); pointer-events: none; }
+        .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+        .why-card {
+            background: var(--navy-lighter); border: 1px solid var(--border-subtle);
+            position: relative; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            overflow: hidden; border-radius: var(--radius-md);
+        }
+        .why-card:hover { border-color: var(--border-hover); box-shadow: var(--shadow-gold); }
+        .why-card .why-img {
+            width: 100%; height: 130px; object-fit: cover;
+            filter: grayscale(60%) brightness(0.45);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .why-card:hover .why-img { filter: grayscale(0%) brightness(0.65); transform: scale(1.05); }
+        .why-card .why-img-wrap { overflow: hidden; position: relative; }
+        .why-card .why-img-wrap::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 45px;
+            background: linear-gradient(to top, var(--navy-lighter), transparent); z-index: 1;
+        }
+        .why-card-content { padding: 1.25rem; text-align: center; position: relative; z-index: 2; margin-top: -22px; }
+        .why-card .why-number { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; 
+            color: rgba(212,175,55,0.12); position: absolute; top: 0.4rem; right: 0.75rem; 
+            line-height: 1; z-index: 3; letter-spacing: -1px;
+        }
+        .why-card .why-icon { 
+            width: 42px; height: 42px; margin: 0 auto 0.875rem; 
+            background: var(--navy-lighter); border: 1px solid rgba(212,175,55,0.25); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            position: relative; z-index: 3; 
+        }
+        .why-card .why-icon svg { width: 18px; height: 18px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+        .why-card h3 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600; 
+            color: var(--white); margin-bottom: 0.6rem; letter-spacing: -0.2px; 
+        }
+        .why-card p { font-size: 0.85rem; color: var(--gray-dark); line-height: 1.65; }
+
+        .partners { background: var(--navy-light); overflow: hidden; }
+        .partners-slider-wrap { position: relative; max-width: 1200px; margin: 0 auto; }
+        .partners-track {
+            display: flex; gap: 2rem;
+            animation: partnersScroll 35s linear infinite;
+            width: max-content;
+        }
+        .partners-slider-wrap:hover .partners-track { animation-play-state: paused; }
+        @keyframes partnersScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .partner-item {
+            flex-shrink: 0; width: 200px;
+            background: var(--navy-card); border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md); padding: 1.25rem; text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
+        }
+        .partner-item:hover {
+            border-color: var(--border-hover); transform: translateY(-5px);
+            box-shadow: var(--shadow-gold);
+        }
+        .partner-item img {
+            width: 70px; height: 70px; border-radius: 50%;
+            object-fit: cover; margin-bottom: 0.875rem;
+            border: 2px solid rgba(212,175,55,0.2);
+            filter: grayscale(30%);
+            transition: all 0.4s ease;
+        }
+        .partner-item:hover img { filter: grayscale(0%); border-color: var(--gold); }
+        .partner-item h4 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; color: var(--white); 
+            margin-bottom: 0.2rem; font-weight: 600; letter-spacing: -0.2px;
+        }
+        .partner-item span { 
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--gold); 
+            text-transform: uppercase; letter-spacing: 1px; 
+        }
+        .partner-item p { font-size: 0.78rem; color: var(--gray-dark); margin-top: 0.4rem; line-height: 1.5; }
+        .partners-fade-left, .partners-fade-right {
+            position: absolute; top: 0; width: 80px; height: 100%;
+            z-index: 2; pointer-events: none;
+        }
+        .partners-fade-left { left: 0; background: linear-gradient(to right, var(--navy-light), transparent); }
+        .partners-fade-right { right: 0; background: linear-gradient(to left, var(--navy-light), transparent); }
+
+        .testimonials { background: var(--navy-light); overflow: hidden; }
+        .testimonials-slider { max-width: 900px; margin: 0 auto; position: relative; }
+        .testimonial-track { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .testimonial-slide { min-width: 100%; padding: 0 1rem; }
+        .testimonial-card {
+            background: var(--navy); border: 1px solid var(--border-subtle);
+            position: relative; overflow: hidden; border-radius: var(--radius-md);
+        }
+        .testimonial-card .testimonial-img {
+            width: 100%; height: 180px; object-fit: cover;
+            filter: grayscale(35%) brightness(0.5);
+        }
+        .testimonial-card .testimonial-img-wrap { position: relative; overflow: hidden; }
+        .testimonial-card .testimonial-img-wrap::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 70px;
+            background: linear-gradient(to top, var(--navy), transparent);
+        }
+        .testimonial-card-content { padding: 2rem 2.5rem 2.5rem; text-align: center; position: relative; }
+        .testimonial-card::before {
+            content: '"'; font-family: 'Space Grotesk', sans-serif; font-size: 7rem;
+            color: rgba(212,175,55,0.08); position: absolute; top: 160px; left: 1.5rem; line-height: 1; z-index: 1;
+        }
+        .testimonial-card p { 
+            font-size: 1.1rem; color: var(--gray-light); line-height: 1.8; 
+            font-style: italic; margin-bottom: 1.75rem; position: relative; z-index: 1; 
+            font-weight: 400;
+        }
+        .testimonial-author { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+        .testimonial-author .avatar { width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; }
+        .testimonial-author .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .testimonial-author .info h4 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; color: var(--white); 
+            margin-bottom: 0.15rem; font-weight: 600; 
+        }
+        .testimonial-author .info span { 
+            font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--gold); 
+            text-transform: uppercase; letter-spacing: 1.5px; 
+        }
+        .testimonial-nav { display: flex; justify-content: center; gap: 0.75rem; margin-top: 2rem; }
+        .testimonial-nav button { 
+            width: 44px; height: 44px; background: transparent; 
+            border: 1px solid rgba(212,175,55,0.2); color: var(--gold); 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            transition: all 0.3s ease; border-radius: var(--radius-sm);
+        }
+        .testimonial-nav button:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+        .testimonial-nav button svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+        .testimonial-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.25rem; }
+        .testimonial-dots .dot { 
+            width: 8px; height: 8px; border-radius: 50%; background: rgba(212,175,55,0.15); 
+            cursor: pointer; transition: all 0.3s ease; 
+        }
+        .testimonial-dots .dot.active { background: var(--gold); transform: scale(1.2); }
+
+        .cta-section {
+            background: linear-gradient(135deg, var(--navy-lighter) 0%, var(--navy) 100%);
+            text-align: center; position: relative; overflow: hidden;
+        }
+        .cta-section::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(212,175,55,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(196,30,58,0.04) 0%, transparent 50%);
+        }
+        .cta-section .section-header { position: relative; z-index: 1; }
+        .cta-section .section-title { font-size: clamp(2rem, 5vw, 3.2rem); }
+        .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; margin-top: 2rem; }
+
+        .contact { background: var(--navy-light); }
+        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 1200px; margin: 0 auto; }
+        .contact-info h3 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.7rem; font-weight: 700; 
+            margin-bottom: 1.25rem; letter-spacing: -0.5px;
+        }
+        .contact-info h3 span { color: var(--gold); }
+        .contact-info p { color: var(--gray); margin-bottom: 1.75rem; line-height: 1.75; font-weight: 400; }
+        .contact-details { display: flex; flex-direction: column; gap: 1.25rem; }
+        .contact-item { display: flex; align-items: flex-start; gap: 1rem; }
+        .contact-item .icon { 
+            width: 44px; height: 44px; min-width: 44px; 
+            background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.15); 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: var(--radius-sm);
+        }
+        .contact-item .icon svg { width: 20px; height: 20px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+        .contact-item .detail h4 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600; 
+            color: var(--white); margin-bottom: 0.2rem; text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+        .contact-item .detail p, .contact-item .detail a { 
+            color: var(--gray-dark); font-size: 0.9rem; text-decoration: none; 
+            transition: color 0.3s ease; font-weight: 400;
+        }
+        .contact-item .detail a:hover { color: var(--gold); }
+        .contact-form { 
+            background: var(--navy); border: 1px solid var(--border-subtle); 
+            padding: 2.25rem; border-radius: var(--radius-md); 
+        }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { 
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 500; 
+            color: var(--gray-dark); text-transform: uppercase; letter-spacing: 1.5px; 
+            display: block; margin-bottom: 0.4rem; 
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 0.875rem 1rem; background: var(--navy-lighter);
+            border: 1px solid var(--border-subtle); color: var(--white);
+            font-family: 'DM Sans', sans-serif; font-size: 0.9rem; 
+            transition: all 0.3s ease; border-radius: var(--radius-sm);
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { 
+            outline: none; border-color: var(--gold); 
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.08); 
+        }
+        .form-group textarea { min-height: 110px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+        .submit-btn {
+            width: 100%; padding: 1.1rem; background: var(--gold); color: var(--navy);
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 1.5px; border: none; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: var(--radius-sm);
+        }
+        .submit-btn:hover { background: var(--gold-light); box-shadow: 0 0 30px rgba(212,175,55,0.35); transform: translateY(-2px); }
+
+        .footer { background: var(--navy); border-top: 1px solid var(--border-subtle); padding: 4rem 5% 2rem; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; max-width: 1200px; margin: 0 auto 3rem; }
+        .footer-brand .logo { margin-bottom: 1.25rem; }
+        .footer-brand p { color: var(--gray-dark); font-size: 0.9rem; line-height: 1.75; margin-bottom: 1.25rem; font-weight: 400; }
+        .social-links { display: flex; gap: 0.75rem; }
+        .social-links a { 
+            width: 38px; height: 38px; border: 1px solid var(--border-subtle); 
+            display: flex; align-items: center; justify-content: center; 
+            color: var(--gray-dark); text-decoration: none; transition: all 0.3s ease; 
+            border-radius: var(--radius-sm);
+        }
+        .social-links a:hover { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+        .social-links a svg { width: 16px; height: 16px; fill: currentColor; }
+        .footer-col h4 { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600; 
+            color: var(--white); margin-bottom: 1.25rem; letter-spacing: 0.5px; 
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 0.65rem; }
+        .footer-col ul li a { 
+            color: var(--gray-dark); text-decoration: none; font-size: 0.88rem; 
+            transition: color 0.3s ease; display: inline-flex; align-items: center; gap: 0.4rem; 
+            font-weight: 400;
+        }
+        .footer-col ul li a:hover { color: var(--gold); }
+        .footer-col ul li a::before { content: '->'; font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; color: var(--gold); opacity: 0; transition: opacity 0.3s ease; }
+        .footer-col ul li a:hover::before { opacity: 1; }
+        .footer-bottom { border-top: 1px solid var(--border-subtle); padding-top: 1.75rem; text-align: center; }
+        .footer-bottom p { color: var(--gray-dark); font-size: 0.82rem; font-weight: 400; }
+        .footer-bottom span { color: var(--gold); }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .reveal { opacity: 0; transform: translateY(35px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 1024px) {
+            .about-container, .contact-container { grid-template-columns: 1fr; gap: 3rem; }
+            .why-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .about-visual { max-width: 500px; margin: 0 auto; }
+        }
+        @media (max-width: 768px) {
+            html { font-size: 15px; }
+            .nav-links { display: none; }
+            .nav-cta { display: none; }
+            .mobile-menu-btn { display: flex; }
+            .hero { padding: 7rem 5% 3rem; }
+            .hero-stats { gap: 1.75rem; margin-top: 3rem; }
+            .stat-number { font-size: 1.8rem; }
+            .stat-label { font-size: 0.7rem; }
+            .why-grid { grid-template-columns: 1fr; }
+            .about-features { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .cursor-dot, .cursor-ring { display: none; }
+            .about-visual .experience-badge { bottom: 10px; right: 10px; padding: 1rem 1.25rem; }
+            .about-visual .experience-badge .num { font-size: 1.6rem; }
+            .partner-item { width: 170px; padding: 1rem; }
+            .partner-item img { width: 60px; height: 60px; }
+            section { padding: 4rem 5%; }
+            .section-header { margin-bottom: 2.5rem; }
+            .services-grid { grid-template-columns: 1fr; }
+            .sectors-grid { grid-template-columns: 1fr; }
+            .testimonial-card-content { padding: 1.5rem 1.25rem 2rem; }
+            .contact-form { padding: 1.5rem; }
+        }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2.4rem; }
+            .hero-badge { font-size: 0.7rem; padding: 0.4rem 1rem; }
+            .btn-primary, .btn-secondary { padding: 0.875rem 1.75rem; font-size: 0.78rem; }
+            .section-title { font-size: 1.8rem; }
+            .about-content h2 { font-size: 1.9rem; }
+            .contact-info h3 { font-size: 1.5rem; }
+            .testimonial-card p { font-size: 1rem; }
+        }
+
+        .mobile-nav {
+            position: fixed; top: 0; right: -100%;
+            width: 80%; max-width: 320px; height: 100vh;
+            background: var(--navy); border-left: 1px solid var(--border-subtle);
+            z-index: 999; padding: 5rem 2rem 2rem;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto;
+        }
+        .mobile-nav.active { right: 0; }
+        .mobile-nav ul { list-style: none; }
+        .mobile-nav ul li { margin-bottom: 1.25rem; }
+        .mobile-nav ul li a { 
+            font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; color: var(--white); 
+            text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px; 
+            transition: color 0.3s ease; font-weight: 600;
+        }
+        .mobile-nav ul li a:hover { color: var(--gold); }
+        .mobile-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.65); z-index: 998; opacity: 0; visibility: hidden; 
+            transition: all 0.3s ease; backdrop-filter: blur(4px);
+        }
+        .mobile-overlay.active { opacity: 1; visibility: visible; }
+    </style>
+<base target="_blank">
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<nav class="navbar" id="navbar">
+    <a href="#" class="logo">
+        <div class="logo-icon">
+            <svg viewBox="0 0 100 100">
+                <path d="M50 5 L85 30 L85 70 L50 95 L15 70 L15 30 Z" fill="none" stroke="#D4AF37" stroke-width="2"/>
+                <path d="M50 20 L70 35 L70 60 L50 75 L30 60 L30 35 Z" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+                <path d="M50 35 L60 42 L60 55 L50 62 L40 55 L40 42 Z" fill="#D4AF37"/>
+                <path d="M50 5 L50 20 M50 75 L50 95 M15 30 L30 35 M70 35 L85 30 M15 70 L30 60 M70 60 L85 70" stroke="#D4AF37" stroke-width="1"/>
+            </svg>
+        </div>
+        <div class="logo-text">EAGLE <span>SECURITY</span></div>
+    </a>
+    <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#sectors">Sectors</a></li>
+        <li><a href="#partners">Partners</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Protection</button>
+    <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+<div class="mobile-nav" id="mobileNav">
+    <ul>
+        <li><a href="#home" onclick="toggleMobileMenu()">Home</a></li>
+        <li><a href="#about" onclick="toggleMobileMenu()">About</a></li>
+        <li><a href="#services" onclick="toggleMobileMenu()">Services</a></li>
+        <li><a href="#sectors" onclick="toggleMobileMenu()">Sectors</a></li>
+        <li><a href="#partners" onclick="toggleMobileMenu()">Partners</a></li>
+        <li><a href="#contact" onclick="toggleMobileMenu()">Contact</a></li>
+    </ul>
+</div>
+
+<section class="hero" id="home">
+    <div class="hero-bg">
+        <div class="hero-eagle-bg">
+            <img src="https://plus.unsplash.com/premium_photo-1661889505655-97a2f9007124?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c2VjdXJpdHklMjBlYWdsZSUyMGV5ZXxlbnwwfHwwfHx8MA%3D%3D">
+            <div class="hero-eagle-overlay"></div>
+        </div>
+    </div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+        <div class="hero-badge"><span class="pulse"></span>24/7 Active Protection</div>
+        <h1 class="hero-title">
+            <span class="line1">Protecting What</span>
+            <span class="line2">Matters Most</span>
+        </h1>
+        <p class="hero-subtitle">Eagle Security Service delivers elite private protection across all sectors. From corporate headquarters to critical infrastructure, our trained professionals ensure uncompromising safety with cutting-edge technology and tactical expertise.</p>
+        <div class="hero-cta-group">
+            <a href="#contact" class="btn-primary">Request Security</a>
+            <a href="#services" class="btn-secondary">Our Services</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item"><span class="stat-number" data-count="25">0</span><span class="stat-label">Years Experience</span></div>
+            <div class="stat-item"><span class="stat-number" data-count="500">0</span><span class="stat-label">Active Guards</span></div>
+            <div class="stat-item"><span class="stat-number" data-count="1000">0</span><span class="stat-label">Clients Protected</span></div>
+            <div class="stat-item"><span class="stat-number" data-count="0">0</span><span class="stat-label">Incidents Missed</span></div>
+        </div>
+    </div>
+    <div class="scroll-indicator"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<section class="services" id="services">
+    <div class="section-header reveal">
+        <span class="section-label">Our Expertise</span>
+        <h2 class="section-title">Comprehensive Security<br>Solutions</h2>
+        <p class="section-desc">Tailored protection services designed to meet the unique demands of every sector we serve.</p>
+    </div>
+    <div class="services-grid">
+        <div class="service-card reveal">
+            <div class="service-img-wrap">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop" alt="Corporate Security" class="service-img" loading="lazy">
+            </div>
+            <div class="service-card-content">
+                <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+                <h3>Corporate Security</h3>
+                <p>Executive protection, access control, and threat assessment for corporate environments. We safeguard your business operations with discretion and precision.</p>
+                <a href="#contact" class="service-link">Learn More <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+        </div>
+        <div class="service-card reveal">
+            <div class="service-img-wrap">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop" alt="Residential Protection" class="service-img" loading="lazy">
+            </div>
+            <div class="service-card-content">
+                <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                <h3>Residential Protection</h3>
+                <p>Elite residential security for high-net-worth individuals, estates, and gated communities. 24/7 patrols and rapid response teams ensure home safety.</p>
+                <a href="#contact" class="service-link">Learn More <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+        </div>
+        <div class="service-card reveal">
+            <div class="service-img-wrap">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop" alt="Surveillance Systems" class="service-img" loading="lazy">
+            </div>
+            <div class="service-card-content">
+                <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+                <h3>Surveillance Systems</h3>
+                <p>Advanced CCTV, drone surveillance, and AI-powered monitoring systems. Real-time threat detection with centralized command center operations.</p>
+                <a href="#contact" class="service-link">Learn More <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+        </div>
+        <div class="service-card reveal">
+            <div class="service-img-wrap">
+                <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&h=400&fit=crop" alt="Event Security" class="service-img" loading="lazy">
+            </div>
+            <div class="service-card-content">
+                <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <h3>Event Security</h3>
+                <p>Comprehensive crowd management and VIP protection for concerts, conferences, and private events. Licensed professionals trained in de-escalation tactics.</p>
+                <a href="#contact" class="service-link">Learn More <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+        </div>
+        <div class="service-card reveal">
+            <div class="service-img-wrap">
+                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=400&fit=crop" alt="Logistics and Transport" class="service-img" loading="lazy">
+            </div>
+            <div class="service-card-content">
+                <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+                <h3>Logistics & Transport</h3>
+                <p>Secure cargo escort, armored transport, and supply chain protection. GPS-tracked convoys with armed escorts for high-value shipments.</p>
+                <a href="#contact" class="service-link">Learn More <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+        </div>
+        <div class="service-card reveal">
+            <div class="service-img-wrap">
+                <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&h=400&fit=crop" alt="Crisis Response" class="service-img" loading="lazy">
+            </div>
+            <div class="service-card-content">
+                <div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div>
+                <h3>Crisis Response</h3>
+                <p>Emergency response teams ready for active threats, natural disasters, and security breaches. Rapid deployment with tactical medical support.</p>
+                <a href="#contact" class="service-link">Learn More <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about" id="about">
+    <div class="about-container">
+        <div class="about-visual reveal">
+            <div class="frame">
+                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&h=750&fit=crop" alt="Security professional" loading="lazy">
+            </div>
+            <div class="experience-badge"><span class="num">25+</span><span class="text">Years of<br>Excellence</span></div>
+        </div>
+        <div class="about-content reveal">
+            <span class="section-label" style="text-align:left;margin-bottom:1rem;display:block;">About Us</span>
+            <h2>Trusted Guardians of<br><span>Your Safety</span></h2>
+            <p>Founded in 2001, Eagle Security Service has grown from a small local agency to one of the region's most respected private security firms. Our commitment to excellence, integrity, and innovation sets us apart in an industry where trust is everything.</p>
+            <p>We employ over 500 licensed security professionals, each rigorously trained in threat assessment, conflict resolution, emergency response, and advanced surveillance technology. Our command center operates 24/7, monitoring client assets across multiple sectors.</p>
+            <div class="about-features">
+                <div class="about-feature"><div class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><h4>Licensed & Insured</h4><p>Fully certified professionals</p></div></div>
+                <div class="about-feature"><div class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><h4>24/7 Command Center</h4><p>Real-time monitoring always</p></div></div>
+                <div class="about-feature"><div class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><h4>Tactical Training</h4><p>Military-grade preparation</p></div></div>
+                <div class="about-feature"><div class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><h4>Tech-Enabled</h4><p>AI surveillance & drones</p></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="sectors" id="sectors">
+    <div class="section-header reveal">
+        <span class="section-label">Industries We Serve</span>
+        <h2 class="section-title">Sector-Specific<br>Protection</h2>
+        <p class="section-desc">Specialized security protocols tailored to the unique risks of each industry.</p>
+    </div>
+    <div class="sectors-grid">
+        <div class="sector-card reveal">
+            <div class="sector-img-wrap">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop" alt="Corporate" class="sector-img" loading="lazy">
+            </div>
+            <div class="sector-card-content">
+                <div class="sector-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+                <h3>Corporate & Finance</h3>
+                <p>Banking institutions, corporate HQs, and financial data centers with strict access protocols.</p>
+            </div>
+        </div>
+        <div class="sector-card reveal">
+            <div class="sector-img-wrap">
+                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&h=400&fit=crop" alt="Healthcare" class="sector-img" loading="lazy">
+            </div>
+            <div class="sector-card-content">
+                <div class="sector-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+                <h3>Healthcare</h3>
+                <p>Hospital security, pharmaceutical transport, and medical facility access control.</p>
+            </div>
+        </div>
+        <div class="sector-card reveal">
+            <div class="sector-img-wrap">
+                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c6f1?w=600&h=400&fit=crop" alt="Education" class="sector-img" loading="lazy">
+            </div>
+            <div class="sector-card-content">
+                <div class="sector-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+                <h3>Education</h3>
+                <p>Campus safety, student protection, and school emergency response planning.</p>
+            </div>
+        </div>
+        <div class="sector-card reveal">
+            <div class="sector-img-wrap">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop" alt="Retail" class="sector-img" loading="lazy">
+            </div>
+            <div class="sector-card-content">
+                <div class="sector-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+                <h3>Retail & Hospitality</h3>
+                <p>Loss prevention, guest safety, and crowd management for hotels and malls.</p>
+            </div>
+        </div>
+        <div class="sector-card reveal">
+            <div class="sector-img-wrap">
+                <img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=600&h=400&fit=crop" alt="Energy" class="sector-img" loading="lazy">
+            </div>
+            <div class="sector-card-content">
+                <div class="sector-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+                <h3>Energy & Utilities</h3>
+                <p>Power plant security, pipeline protection, and critical infrastructure defense.</p>
+            </div>
+        </div>
+        <div class="sector-card reveal">
+            <div class="sector-img-wrap">
+                <img src="https://images.unsplash.com/photo-1529107386315-e8a6ed835e4f?w=600&h=400&fit=crop" alt="Government" class="sector-img" loading="lazy">
+            </div>
+            <div class="sector-card-content">
+                <div class="sector-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                <h3>Government</h3>
+                <p>Embassy protection, municipal building security, and public event management.</p>
+            </div>
+        </div>
+        <div class="sector-card reveal">
+            <div class="sector-img-wrap">
+                <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&h=400&fit=crop" alt="Transportation" class="sector-img" loading="lazy">
+            </div>
+            <div class="sector-card-content">
+                <div class="sector-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                <h3>Transportation</h3>
+                <p>Airport security, port protection, and logistics chain safeguarding.</p>
+            </div>
+        </div>
+        <div class="sector-card reveal">
+            <div class="sector-img-wrap">
+                <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=400&fit=crop" alt="Construction" class="sector-img" loading="lazy">
+            </div>
+            <div class="sector-card-content">
+                <div class="sector-icon"><svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+                <h3>Construction</h3>
+                <p>Site surveillance, equipment protection, and worker safety enforcement.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="why-us">
+    <div class="section-header reveal">
+        <span class="section-label">Why Eagle Security</span>
+        <h2 class="section-title">The Eagle<br>Advantage</h2>
+    </div>
+    <div class="why-grid">
+        <div class="why-card reveal">
+            <div class="why-img-wrap">
+                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop" alt="Vetted Personnel" class="why-img" loading="lazy">
+            </div>
+            <div class="why-card-content">
+                <span class="why-number">01</span>
+                <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                <h3>Vetted Personnel</h3>
+                <p>Every guard undergoes background checks, psychological evaluation, and 200+ hours of tactical training.</p>
+            </div>
+        </div>
+        <div class="why-card reveal">
+            <div class="why-img-wrap">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=300&fit=crop" alt="Smart Technology" class="why-img" loading="lazy">
+            </div>
+            <div class="why-card-content">
+                <span class="why-number">02</span>
+                <div class="why-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <h3>Smart Technology</h3>
+                <p>AI-powered analytics, facial recognition, and real-time GPS tracking integrated into every operation.</p>
+            </div>
+        </div>
+        <div class="why-card reveal">
+            <div class="why-img-wrap">
+                <img src="https://images.unsplash.com/photo-1580893246365-52f6a7c4cfb7?w=400&h=300&fit=crop" alt="Rapid Response" class="why-img" loading="lazy">
+            </div>
+            <div class="why-card-content">
+                <span class="why-number">03</span>
+                <div class="why-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                <h3>Rapid Response</h3>
+                <p>Average response time under 3 minutes with dedicated rapid deployment units on standby 24/7.</p>
+            </div>
+        </div>
+        <div class="why-card reveal">
+            <div class="why-img-wrap">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop" alt="Client Partnership" class="why-img" loading="lazy">
+            </div>
+            <div class="why-card-content">
+                <span class="why-number">04</span>
+                <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <h3>Client Partnership</h3>
+                <p>Dedicated account managers and customized security plans that evolve with your changing needs.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="partners" id="partners">
+    <div class="section-header reveal">
+        <span class="section-label">Trusted Partners</span>
+        <h2 class="section-title">Our Strategic<br>Alliances</h2>
+        <p class="section-desc">We collaborate with industry leaders to deliver comprehensive security ecosystems.</p>
+    </div>
+    <div class="partners-slider-wrap">
+        <div class="partners-fade-left"></div>
+        <div class="partners-fade-right"></div>
+        <div class="partners-track" id="partnersTrack">
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=200&h=200&fit=crop&crop=face" alt="Apex Corp">
+                <h4>Apex Corporation</h4>
+                <span>Technology Partner</span>
+                <p>Advanced surveillance systems integration</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=200&h=200&fit=crop&crop=face" alt="ShieldTech">
+                <h4>ShieldTech Global</h4>
+                <span>Equipment Supplier</span>
+                <p>Body armor & tactical gear</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=200&h=200&fit=crop" alt="MetroBank">
+                <h4>MetroBank Group</h4>
+                <span>Financial Partner</span>
+                <p>Corporate security services</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=200&h=200&fit=crop" alt="SafeGuard">
+                <h4>SafeGuard Insurance</h4>
+                <span>Risk Management</span>
+                <p>Comprehensive liability coverage</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=200&h=200&fit=crop&crop=face" alt="DroneVision">
+                <h4>DroneVision AI</h4>
+                <span>Aerial Surveillance</span>
+                <p>Autonomous drone patrol systems</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=200&h=200&fit=crop" alt="SecureNet">
+                <h4>SecureNet Systems</h4>
+                <span>Cyber Security</span>
+                <p>Digital threat protection</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=200&h=200&fit=crop&crop=face" alt="GlobalRisk">
+                <h4>GlobalRisk Advisors</h4>
+                <span>Consulting Partner</span>
+                <p>Threat assessment & planning</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=200&h=200&fit=crop&crop=face" alt="TacticalPro">
+                <h4>TacticalPro Academy</h4>
+                <span>Training Partner</span>
+                <p>Elite guard certification</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=200&h=200&fit=crop&crop=face" alt="Apex Corp">
+                <h4>Apex Corporation</h4>
+                <span>Technology Partner</span>
+                <p>Advanced surveillance systems integration</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=200&h=200&fit=crop&crop=face" alt="ShieldTech">
+                <h4>ShieldTech Global</h4>
+                <span>Equipment Supplier</span>
+                <p>Body armor & tactical gear</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=200&h=200&fit=crop" alt="MetroBank">
+                <h4>MetroBank Group</h4>
+                <span>Financial Partner</span>
+                <p>Corporate security services</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=200&h=200&fit=crop" alt="SafeGuard">
+                <h4>SafeGuard Insurance</h4>
+                <span>Risk Management</span>
+                <p>Comprehensive liability coverage</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=200&h=200&fit=crop&crop=face" alt="DroneVision">
+                <h4>DroneVision AI</h4>
+                <span>Aerial Surveillance</span>
+                <p>Autonomous drone patrol systems</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=200&h=200&fit=crop" alt="SecureNet">
+                <h4>SecureNet Systems</h4>
+                <span>Cyber Security</span>
+                <p>Digital threat protection</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=200&h=200&fit=crop&crop=face" alt="GlobalRisk">
+                <h4>GlobalRisk Advisors</h4>
+                <span>Consulting Partner</span>
+                <p>Threat assessment & planning</p>
+            </div>
+            <div class="partner-item">
+                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=200&h=200&fit=crop&crop=face" alt="TacticalPro">
+                <h4>TacticalPro Academy</h4>
+                <span>Training Partner</span>
+                <p>Elite guard certification</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials">
+    <div class="section-header reveal">
+        <span class="section-label">Client Testimonials</span>
+        <h2 class="section-title">Trusted By<br>Industry Leaders</h2>
+    </div>
+    <div class="testimonials-slider">
+        <div class="testimonial-track" id="testimonialTrack">
+            <div class="testimonial-slide">
+                <div class="testimonial-card">
+                    <div class="testimonial-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=400&fit=crop" alt="Corporate office" class="testimonial-img" loading="lazy">
+                    </div>
+                    <div class="testimonial-card-content">
+                        <p>Eagle Security transformed our corporate security posture. Their team identified vulnerabilities we never knew existed and implemented a comprehensive protection strategy that gives our board complete confidence.</p>
+                        <div class="testimonial-author">
+                            <div class="avatar"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&h=120&fit=crop&crop=face" alt="James Morrison" loading="lazy"></div>
+                            <div class="info"><h4>James Morrison</h4><span>CEO, Apex Financial Group</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-slide">
+                <div class="testimonial-card">
+                    <div class="testimonial-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&h=400&fit=crop" alt="Hospital" class="testimonial-img" loading="lazy">
+                    </div>
+                    <div class="testimonial-card-content">
+                        <p>After a security breach at our hospital, Eagle Security responded within hours. Their crisis management team was exceptional. We have had zero incidents since implementing their protocols six months ago.</p>
+                        <div class="testimonial-author">
+                            <div class="avatar"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&h=120&fit=crop&crop=face" alt="Dr. Sarah Chen" loading="lazy"></div>
+                            <div class="info"><h4>Dr. Sarah Chen</h4><span>Director, Metro General Hospital</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-slide">
+                <div class="testimonial-card">
+                    <div class="testimonial-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop" alt="Event venue" class="testimonial-img" loading="lazy">
+                    </div>
+                    <div class="testimonial-card-content">
+                        <p>The level of professionalism from Eagle Security is unmatched. Their event security team managed a 50,000-person concert flawlessly. Crowd control, VIP protection, and emergency protocols were executed perfectly.</p>
+                        <div class="testimonial-author">
+                            <div class="avatar"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&crop=face" alt="Marcus Webb" loading="lazy"></div>
+                            <div class="info"><h4>Marcus Webb</h4><span>Event Director, Starlight Promotions</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-nav">
+            <button onclick="prevSlide()" aria-label="Previous testimonial"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <button onclick="nextSlide()" aria-label="Next testimonial"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+        <div class="testimonial-dots" id="testimonialDots"></div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="section-header reveal">
+        <span class="section-label">Get Started</span>
+        <h2 class="section-title">Your Safety Is<br>Our Mission</h2>
+        <p class="section-desc">Contact us today for a free security assessment and customized protection plan tailored to your specific needs.</p>
+    </div>
+    <div class="cta-buttons">
+        <a href="#contact" class="btn-primary">Free Assessment</a>
+        <a href="tel:+1234567890" class="btn-secondary">Call Now</a>
+    </div>
+</section>
+
+<section class="contact" id="contact">
+    <div class="section-header reveal">
+        <span class="section-label">Contact Us</span>
+        <h2 class="section-title">Secure Your<br>Perimeter</h2>
+        <p class="section-desc">Reach out to our security consultants for a confidential consultation.</p>
+    </div>
+    <div class="contact-container">
+        <div class="contact-info reveal">
+            <h3>Get In <span>Touch</span></h3>
+            <p>Our security consultants are available 24/7 to discuss your protection needs. Whether you need immediate response or long-term strategic planning, we are here to help.</p>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <div class="icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+                    <div class="detail"><h4>Emergency Line</h4><a href="tel:+1234567890">+1 (234) 567-890</a></div>
+                </div>
+                <div class="contact-item">
+                    <div class="icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                    <div class="detail"><h4>Email</h4><a href="mailto:info@eaglesecurity.com">info@eaglesecurity.com</a></div>
+                </div>
+                <div class="contact-item">
+                    <div class="icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                    <div class="detail"><h4>Headquarters</h4><p>123 Security Plaza, Suite 500<br>New York, NY 10001</p></div>
+                </div>
+                <div class="contact-item">
+                    <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                    <div class="detail"><h4>Operating Hours</h4><p>24 Hours / 7 Days a Week</p></div>
+                </div>
+            </div>
+        </div>
+        <div class="contact-form reveal">
+            <form id="contactForm" onsubmit="handleFormSubmit(event)">
+                <div class="form-row">
+                    <div class="form-group"><label for="firstName">First Name</label><input type="text" id="firstName" name="firstName" required></div>
+                    <div class="form-group"><label for="lastName">Last Name</label><input type="text" id="lastName" name="lastName" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
+                    <div class="form-group"><label for="phone">Phone</label><input type="tel" id="phone" name="phone"></div>
+                </div>
+                <div class="form-group">
+                    <label for="sector">Sector</label>
+                    <select id="sector" name="sector">
+                        <option value="">Select Your Sector</option>
+                        <option value="corporate">Corporate & Finance</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="education">Education</option>
+                        <option value="retail">Retail & Hospitality</option>
+                        <option value="energy">Energy & Utilities</option>
+                        <option value="government">Government</option>
+                        <option value="transport">Transportation</option>
+                        <option value="construction">Construction</option>
+                        <option value="residential">Residential</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="service">Service Required</label>
+                    <select id="service" name="service">
+                        <option value="">Select Service Type</option>
+                        <option value="corporate">Corporate Security</option>
+                        <option value="residential">Residential Protection</option>
+                        <option value="surveillance">Surveillance Systems</option>
+                        <option value="event">Event Security</option>
+                        <option value="logistics">Logistics & Transport</option>
+                        <option value="crisis">Crisis Response</option>
+                        <option value="consultation">Security Consultation</option>
+                    </select>
+                </div>
+                <div class="form-group"><label for="message">Message</label><textarea id="message" name="message" placeholder="Describe your security needs..."></textarea></div>
+                <button type="submit" class="submit-btn">Send Request</button>
+            </form>
+        </div>
+    </div>
+</section>
+<footer class="footer">
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100">
+                        <path d="M50 5 L85 30 L85 70 L50 95 L15 70 L15 30 Z" fill="none" stroke="#D4AF37" stroke-width="2"/>
+                        <path d="M50 20 L70 35 L70 60 L50 75 L30 60 L30 35 Z" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+                        <path d="M50 35 L60 42 L60 55 L50 62 L40 55 L40 42 Z" fill="#D4AF37"/>
+                    </svg>
+                </div>
+                <div class="logo-text">EAGLE <span>SECURITY</span></div>
+            </a>
+            <p>Elite private security services protecting what matters most. Licensed, insured, and available 24/7 across all sectors.</p>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+                <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+                <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+                <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Services</h4>
+            <ul>
+                <li><a href="#services">Corporate Security</a></li>
+                <li><a href="#services">Residential Protection</a></li>
+                <li><a href="#services">Surveillance Systems</a></li>
+                <li><a href="#services">Event Security</a></li>
+                <li><a href="#services">Crisis Response</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#sectors">Sectors</a></li>
+                <li><a href="#partners">Partners</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Licensing</a></li>
+                <li><a href="#">Insurance</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 Eagle Security Service. All rights reserved. <span>Protecting What Matters.</span></p>
+    </div>
+</footer>
+
+<script>
+// ===== PARTICLE SYSTEM =====
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let animationId;
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.speedY = (Math.random() - 0.5) * 0.3;
+        this.opacity = Math.random() * 0.5 + 0.1;
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.y < 0) this.y = canvas.height;
+        if (this.y > canvas.height) this.y = 0;
+    }
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+        ctx.fill();
+    }
+}
+
+function initParticles() {
+    particles = [];
+    const particleCount = Math.min(window.innerWidth / 10, 100);
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+}
+initParticles();
+
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 100) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(212, 175, 55, ${0.1 * (1 - dist / 100)})`;
+                ctx.lineWidth = 0.5;
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+            }
+        }
+    }
+    animationId = requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ===== CUSTOM CURSOR =====
+const cursorDot = document.querySelector('.cursor-dot');
+const cursorRing = document.querySelector('.cursor-ring');
+let mouseX = 0, mouseY = 0;
+let dotX = 0, dotY = 0;
+let ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+function animateCursor() {
+    dotX += (mouseX - dotX) * 0.2;
+    dotY += (mouseY - dotY) * 0.2;
+    ringX += (mouseX - ringX) * 0.1;
+    ringY += (mouseY - ringY) * 0.1;
+    cursorDot.style.left = dotX - 4 + 'px';
+    cursorDot.style.top = dotY - 4 + 'px';
+    cursorRing.style.left = ringX - 20 + 'px';
+    cursorRing.style.top = ringY - 20 + 'px';
+    requestAnimationFrame(animateCursor);
+}
+if (window.matchMedia('(pointer: fine)').matches) {
+    animateCursor();
+}
+
+const interactiveElements = document.querySelectorAll('a, button, .service-card, .sector-card, .why-card, .partner-item');
+interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        cursorRing.style.transform = 'scale(1.5)';
+        cursorRing.style.borderColor = 'var(--gold-light)';
+    });
+    el.addEventListener('mouseleave', () => {
+        cursorRing.style.transform = 'scale(1)';
+        cursorRing.style.borderColor = 'var(--gold)';
+    });
+});
+
+// ===== NAVBAR SCROLL =====
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+});
+
+// ===== MOBILE MENU =====
+function toggleMobileMenu() {
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    mobileNav.classList.toggle('active');
+    mobileOverlay.classList.toggle('active');
+    menuBtn.classList.toggle('active');
+    document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+}
+
+// ===== SCROLL REVEAL =====
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            revealObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+revealElements.forEach(el => revealObserver.observe(el));
+
+// ===== STAT COUNTER ANIMATION =====
+const statNumbers = document.querySelectorAll('.stat-number');
+const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const target = parseInt(entry.target.dataset.count);
+            const duration = 2000;
+            const start = performance.now();
+            function updateCounter(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(easeOut * target);
+                entry.target.textContent = current + (target > 100 ? '+' : '');
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    entry.target.textContent = target + (target > 100 ? '+' : '');
+                }
+            }
+            requestAnimationFrame(updateCounter);
+            statObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.5 });
+
+statNumbers.forEach(el => statObserver.observe(el));
+
+// ===== TESTIMONIAL SLIDER =====
+let currentSlide = 0;
+const track = document.getElementById('testimonialTrack');
+const slides = document.querySelectorAll('.testimonial-slide');
+const dotsContainer = document.getElementById('testimonialDots');
+
+slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dotsContainer.appendChild(dot);
+});
+
+function updateSlider() {
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    document.querySelectorAll('.testimonial-dots .dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+    });
+}
+
+function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    updateSlider();
+}
+
+function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    updateSlider();
+}
+
+function goToSlide(index) {
+    currentSlide = index;
+    updateSlider();
+}
+
+setInterval(nextSlide, 6000);
+
+// ===== FORM HANDLING =====
+function handleFormSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.submit-btn');
+    const originalText = btn.textContent;
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    setTimeout(() => {
+        btn.textContent = 'Request Sent!';
+        btn.style.background = '#2ecc71';
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = '';
+            btn.disabled = false;
+            e.target.reset();
+        }, 3000);
+    }, 1500);
+}
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    });
+});
+
+// ===== PARALLAX HERO =====
+window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const heroContent = document.querySelector('.hero-content');
+    if (heroContent && scrolled < window.innerHeight) {
+        heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+        heroContent.style.opacity = 1 - (scrolled / window.innerHeight) * 0.5;
+    }
+});
+
+// ===== CLEANUP =====
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        cancelAnimationFrame(animationId);
+    } else {
+        animateParticles();
+    }
+});
+</script>
+</body>
+</html>

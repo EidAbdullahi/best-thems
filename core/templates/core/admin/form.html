@@ -1,0 +1,37 @@
+{% extends 'core/admin/base.html' %}
+
+{% block admin_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <div>
+        <h1>{{ title }}</h1>
+        <p style="color: var(--gray-dark); font-size: 0.9rem; margin-top: 0.25rem;">Fill in the details below</p>
+    </div>
+    <a href="{% url 'admin_dashboard' %}" class="btn-secondary">&larr; Back</a>
+</div>
+
+<div class="dashboard-card">
+    <form method="post" enctype="multipart/form-data" class="admin-form">
+        {% csrf_token %}
+        <div class="form-grid">
+            {% for field in form %}
+            <div class="form-group {% if field.field.widget.input_type == 'textarea' or field.name == 'icon_svg' or field.name == 'description' or field.name == 'quote' or field.name == 'content_paragraph1' or field.name == 'content_paragraph2' or field.name == 'hero_subtitle' or field.name == 'contact_address' or field.name == 'footer_text' %}full-width{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <p class="help-text">{{ field.help_text }}</p>
+                {% endif %}
+                {% if field.errors %}
+                <p style="color: var(--accent-red); font-size: 0.8rem; margin-top: 0.35rem;">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save</button>
+            <a href="{% url 'admin_dashboard' %}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

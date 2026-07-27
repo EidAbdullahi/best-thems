@@ -1,0 +1,78 @@
+{% extends 'core/admin/base.html' %}
+{% load static %}
+
+{% block admin_title %}{{ title|default:"Form" }}{% endblock %}
+
+{% block admin_content %}
+<header class="page-header">
+    <div>
+        <h1>{{ title|default:"Form" }}</h1>
+        <p class="dash-card-sub">{{ subtitle|default:"Fill in the details below" }}</p>
+    </div>
+    <div class="page-header-actions">
+        <a href="{{ cancel_url|default:request.META.HTTP_REFERER }}" class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Cancel
+        </a>
+    </div>
+</header>
+
+<div class="dash-card" style="max-width: 800px;">
+    <div style="padding: var(--space-6) var(--space-6);">
+        <form method="post" {% if form.instance.pk and form.instance.image %}enctype="multipart/form-data"{% endif %} class="admin-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="toast toast-error" style="position: static; animation: none; margin-bottom: var(--space-4);">
+                <span>{{ form.non_field_errors|first }}</span>
+            </div>
+            {% endif %}
+
+            <div class="form-grid">
+                {% for field in form %}
+                <div class="form-group {% if field.field.widget.input_type == 'textarea' or field.name == 'content' or field.name == 'story' or field.name == 'description' or field.name == 'message' %}full-width{% endif %}">
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                        {% if field.field.required %}<span style="color: var(--accent-red);">*</span>{% endif %}
+                    </label>
+
+                    {% if field.field.widget.input_type == 'checkbox' %}
+                    <label class="admin-checkbox" style="margin-top: var(--space-2);">
+                        {{ field }}
+                        <span>{{ field.help_text|default:field.label }}</span>
+                    </label>
+                    {% elif field.field.widget.input_type == 'file' or field.name == 'image' or field.name == 'photo' or field.name == 'logo' %}
+                    {{ field }}
+                    {% if field.value %}
+                    <img src="{{ field.value.url }}" alt="Current image" class="image-preview" id="preview-{{ field.name }}">
+                    {% else %}
+                    <img src="" alt="Preview" class="image-preview" id="preview-{{ field.name }}" style="display: none;">
+                    {% endif %}
+                    {% elif field.field.widget.input_type == 'textarea' or field.name == 'content' or field.name == 'story' or field.name == 'description' or field.name == 'message' %}
+                    {{ field|add_class:"admin-textarea" }}
+                    {% else %}
+                    {{ field|add_class:"admin-input" }}
+                    {% endif %}
+
+                    {% if field.help_text and field.field.widget.input_type != 'checkbox' %}
+                    <p class="help-text">{{ field.help_text }}</p>
+                    {% endif %}
+
+                    {% if field.errors %}
+                    <p style="color: var(--accent-red); font-size: 0.8rem; margin-top: var(--space-1);">{{ field.errors|first }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    {{ submit_text|default:"Save" }}
+                </button>
+                <a href="{{ cancel_url|default:request.META.HTTP_REFERER }}" class="btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
