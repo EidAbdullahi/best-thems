@@ -75,4 +75,5 @@ urlpatterns = [
     path('admin/videos/<int:pk>/edit/', views.admin_video_edit, name='admin_video_edit'),
     path('admin/videos/<int:pk>/delete/', views.admin_video_delete, name='admin_video_delete'),
     path('admin/videos/<int:pk>/toggle/', views.admin_video_toggle, name='admin_video_toggle'),
+
 ]

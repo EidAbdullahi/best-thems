@@ -1,7 +1,7 @@
 /* ==========================================================================
    EAGLE SECURITY - MAIN STYLESHEET
    ========================================================================== */
-body { border: 5px solid red !important; }
+body { border: 5px solid rgb(247, 132, 132) !important; }
 /* ---- CSS Variables ---- */
 :root {
     --gold: #D4AF37;
@@ -12,7 +12,7 @@ body { border: 5px solid red !important; }
     --navy-light: #0F1629;
     --navy-lighter: #151D35;
     --navy-card: #0D1321;
-    --accent-red: #C41E3A;
+    --accent-red: #eddee1;
     --white: #F8F9FC;
     --gray: #8B95A8;
     --gray-light: #A8B2C4;

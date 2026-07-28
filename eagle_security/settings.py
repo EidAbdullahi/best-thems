@@ -107,6 +107,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# SQL
+# POSTGRESS
 
 
 # Password validation
