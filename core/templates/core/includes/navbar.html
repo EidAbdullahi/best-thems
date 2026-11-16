@@ -1,0 +1,65 @@
+
+{% load static %}
+
+<nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="{% url 'home' %}" class="logo">
+        <div class="logo-icon">
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+                <path d="M50 5 L85 30 L85 70 L50 95 L15 70 L15 30 Z"
+                      fill="none" stroke="#D4AF37" stroke-width="3"/>
+                <path d="M50 25 L68 50 L50 75 L32 50 Z"
+                      fill="#D4AF37"/>
+            </svg>
+        </div>
+        <span class="logo-text">OMAR <span>ADEN</span></span>
+    </a>
+
+    <ul class="nav-links" role="menubar">
+        <li role="none"><a href="{% url 'home' %}#home" role="menuitem">Home</a></li>
+        <li role="none"><a href="{% url 'home' %}#about" role="menuitem">About Omar</a></li>
+        <li role="none"><a href="{% url 'home' %}#priorities" role="menuitem">Priorities</a></li>
+        <li role="none"><a href="{% url 'home' %}#community" role="menuitem">Community</a></li>
+        <li role="none"><a href="{% url 'home' %}#updates" role="menuitem">Updates</a></li>
+        <li role="none"><a href="{% url 'home' %}#contact" role="menuitem">Contact</a></li>
+
+        {% if user.is_staff %}
+        <li role="none">
+            <a href="{% url 'admin_dashboard' %}" role="menuitem">Admin</a>
+        </li>
+        {% endif %}
+    </ul>
+
+    <a href="{% url 'home' %}#contact" class="nav-cta">
+        Get In Touch
+    </a>
+
+    <button class="mobile-menu-btn"
+            id="mobileMenuBtn"
+            onclick="toggleMobileMenu()"
+            aria-label="Toggle menu"
+            aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</nav>
+
+<!-- Mobile Navigation -->
+<div class="mobile-overlay"
+     id="mobileOverlay"
+     onclick="toggleMobileMenu()"></div>
+
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+    <ul>
+        <li><a href="{% url 'home' %}#home" onclick="toggleMobileMenu()">Home</a></li>
+        <li><a href="{% url 'home' %}#about" onclick="toggleMobileMenu()">About Omar</a></li>
+        <li><a href="{% url 'home' %}#priorities" onclick="toggleMobileMenu()">Priorities</a></li>
+        <li><a href="{% url 'home' %}#community" onclick="toggleMobileMenu()">Community</a></li>
+        <li><a href="{% url 'home' %}#updates" onclick="toggleMobileMenu()">Updates</a></li>
+        <li><a href="{% url 'home' %}#contact" onclick="toggleMobileMenu()">Contact</a></li>
+
+        {% if user.is_staff %}
+        <li><a href="{% url 'admin_dashboard' %}">Admin Dashboard</a></li>
+        {% endif %}
+    </ul>
+</nav>

@@ -1,0 +1,64 @@
+{% extends 'core/admin/base.html' %}
+
+{% block admin_title %}Services{% endblock %}
+
+{% block admin_content %}
+<div class="page-header">
+    <div>
+        <h1>Services <span>Management</span></h1>
+        <p style="color: var(--gray-dark); font-size: 0.9rem; margin-top: 0.25rem;">Manage your security services</p>
+    </div>
+    <a href="{% url 'admin_service_add' %}" class="btn-primary">+ Add Service</a>
+</div>
+
+<div class="dashboard-card">
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Title</th>
+                    <th>Slug</th>
+                    <th>Image</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td class="mono">{{ service.order }}</td>
+                    <td><strong style="color: var(--white);">{{ service.title }}</strong></td>
+                    <td class="mono">{{ service.slug }}</td>
+                    <td>
+                        {% if service.image %}
+                        <img src="{{ service.image.url }}" alt="" style="width: 50px; height: 35px; object-fit: cover; border-radius: 4px;">
+                        {% else %}<span style="color: var(--gray-dark);">—</span>{% endif %}
+                    </td>
+                    <td>
+                        <button class="status-toggle {% if service.is_active %}active{% endif %}" 
+                                data-url="{% url 'admin_service_toggle' service.pk %}" 
+                                data-id="{{ service.pk }}"></button>
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_service_edit' service.pk %}" class="btn-icon" title="Edit">&#9998;</a>
+                        <form method="post" action="{% url 'admin_service_delete' service.pk %}" style="display:inline;" onsubmit="return confirm('Delete this service?')">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-icon btn-danger" title="Delete">&#128465;</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-cell">
+                        <div class="empty-state">
+                            <p>No services yet. <a href="{% url 'admin_service_add' %}" style="color: var(--gold);">Add your first service</a></p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'core/admin/base.html' %}
+
+{% block admin_title %}Videos{% endblock %}
+
+{% block admin_content %}
+<style>
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+.page-header h1 { font-family: 'Space Grotesk', sans-serif; font-size: 1.75rem; font-weight: 700; color: #F8F9FC; letter-spacing: -0.5px; }
+.btn-primary { font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 600; padding: 0.65rem 1.4rem; background: #D4AF37; color: #0A0F1A; border: none; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 6px; transition: all 0.3s ease; }
+.btn-primary:hover { background: #F0D878; box-shadow: 0 0 25px rgba(212,175,55,0.35); }
+.dashboard-card { background: #0D1321; border: 1px solid rgba(212,175,55,0.08); border-radius: 12px; padding: 1.5rem; overflow: hidden; }
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600; color: #8B95A8; text-transform: uppercase; letter-spacing: 1.5px; text-align: left; padding: 1rem; border-bottom: 1px solid rgba(212,175,55,0.08); }
+.admin-table td { padding: 1rem; border-bottom: 1px solid rgba(212,175,55,0.04); vertical-align: middle; }
+.admin-table tr:hover td { background: rgba(212,175,55,0.02); }
+.admin-table tr:last-child td { border-bottom: none; }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #5A6270; }
+.badge { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; padding: 0.3rem 0.7rem; border-radius: 4px; display: inline-block; }
+.badge-info { background: rgba(59,130,246,0.1); color: #60A5FA; border: 1px solid rgba(59,130,246,0.2); }
+.badge-warning { background: rgba(245,158,11,0.1); color: #FBBF24; border: 1px solid rgba(245,158,11,0.2); }
+.badge-danger { background: rgba(196,30,58,0.1); color: #F87171; border: 1px solid rgba(196,30,58,0.2); }
+.badge-gold { background: rgba(212,175,55,0.1); color: #D4AF37; border: 1px solid rgba(212,175,55,0.25); }
+.status-toggle { width: 44px; height: 24px; background: #151D35; border: 1px solid rgba(212,175,55,0.15); border-radius: 12px; position: relative; cursor: pointer; padding: 0; transition: all 0.3s ease; }
+.status-toggle.active { background: rgba(212,175,55,0.2); border-color: rgba(212,175,55,0.4); }
+.status-toggle .toggle-dot { width: 18px; height: 18px; background: #5A6270; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: all 0.3s ease; }
+.status-toggle.active .toggle-dot { background: #D4AF37; left: 22px; }
+.btn-icon { width: 36px; height: 36px; background: transparent; border: 1px solid rgba(212,175,55,0.1); color: #8B95A8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; border-radius: 6px; font-size: 1rem; transition: all 0.3s ease; }
+.btn-icon:hover { background: rgba(212,175,55,0.08); color: #D4AF37; border-color: rgba(212,175,55,0.25); }
+.btn-danger:hover { background: rgba(196,30,58,0.1); color: #F87171; border-color: rgba(196,30,58,0.3); }
+.empty-state { text-align: center; padding: 4rem 2rem; }
+.empty-state h3 { color: #F8F9FC; font-family: 'Space Grotesk', sans-serif; margin-bottom: 0.5rem; font-size: 1.25rem; }
+.empty-state p { color: #5A6270; margin-bottom: 1.5rem; font-size: 0.9rem; }
+.table-responsive { overflow-x: auto; }
+</style>
+
+<div class="page-header">
+    <div>
+        <h1>Videos</h1>
+        <p style="color: #5A6270; font-size: 0.9rem; margin-top: 0.25rem;">Manage video gallery content</p>
+    </div>
+    <a href="{% url 'admin_video_add' %}" class="btn-primary">+ Add Video</a>
+</div>
+
+<div class="dashboard-card">
+    {% if videos %}
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Order</th>
+                    <th>Preview</th>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Featured</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for video in videos %}
+                <tr>
+                    <td><span class="mono">{{ video.order }}</span></td>
+                    <td>
+                        {% if video.thumbnail %}
+                        <img src="{{ video.thumbnail.url }}" alt="" style="width: 80px; height: 45px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(212,175,55,0.1);">
+                        {% else %}
+                        <div style="width: 80px; height: 45px; background: #151D35; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #5A6270; font-size: 0.75rem;">No image</div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <strong style="color: #F8F9FC; font-weight: 600; font-size: 0.95rem;">{{ video.title }}</strong>
+                        {% if video.description %}
+                        <p style="color: #5A6270; font-size: 0.8rem; margin-top: 0.2rem;">{{ video.description|truncatewords:8 }}</p>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if video.video_file %}
+                        <span class="badge badge-info">Upload</span>
+                        {% elif video.external_url %}
+                        <span class="badge badge-warning">External</span>
+                        {% else %}
+                        <span class="badge badge-danger">No Source</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if video.is_featured %}
+                        <span class="badge badge-gold">Featured</span>
+                        {% else %}
+                        <span class="badge" style="background: rgba(255,255,255,0.03); color: #5A6270; border: 1px solid rgba(255,255,255,0.05);">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'admin_video_toggle' video.pk %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="status-toggle {% if video.is_active %}active{% endif %}" title="Toggle active status">
+                                <span class="toggle-dot"></span>
+                            </button>
+                        </form>
+                    </td>
+                    <td style="text-align: right;">
+                        <a href="{% url 'admin_video_edit' video.pk %}" class="btn-icon" title="Edit">&#9998;</a>
+                        <form method="post" action="{% url 'admin_video_delete' video.pk %}" style="display: inline;" onsubmit="return confirm('Delete this video?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-icon btn-danger" title="Delete">&#128465;</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">&#127909;</div>
+        <h3>No videos yet</h3>
+        <p>Add your first video to display on the site.</p>
+        <a href="{% url 'admin_video_add' %}" class="btn-primary">Add Video</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

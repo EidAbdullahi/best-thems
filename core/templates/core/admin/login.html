@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | MP Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/admin.css' %}">
+<base target="_blank">
+</head>
+<body>
+    {% if messages %}
+    <div class="toast-container">
+        {% for message in messages %}
+        <div class="toast toast-{{ message.tags|default:'info' }}">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="login-page">
+        <div class="login-card">
+            <div class="logo-icon">
+                <svg viewBox="0 0 100 100" width="60" height="60">
+                    <path d="M50 5 L85 30 L85 70 L50 95 L15 70 L15 30 Z" fill="none" stroke="#D4AF37" stroke-width="2"/>
+                    <path d="M50 35 L60 42 L60 55 L50 62 L40 55 L40 42 Z" fill="#D4AF37"/>
+                </svg>
+            </div>
+            <h1>Welcome Back</h1>
+            <p>Sign in to Hon.Omar Control Center</p>
+
+            <form method="post" class="login-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" class="admin-input" placeholder="Enter username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="admin-input" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="btn-primary submit-btn">Sign In</button>
+            </form>
+
+            <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--gray-dark);">
+                <a href="{% url 'home' %}" style="color: var(--gold); text-decoration: none;">&larr; Back to Website</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

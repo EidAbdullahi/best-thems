@@ -1,0 +1,81 @@
+{% extends 'core/admin/base.html' %}
+{% load static %}
+
+{% block admin_title %}Why Choose Us{% endblock %}
+
+{% block admin_content %}
+<header class="page-header">
+    <div>
+        <h1>Why <span>Choose Us</span></h1>
+        <p class="dash-card-sub">Key features and benefits displayed on homepage</p>
+    </div>
+    <div class="page-header-actions">
+        <a href="{% url 'admin_why_us_add' %}" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Feature
+        </a>
+    </div>
+</header>
+
+<div class="dash-card">
+    <div class="dash-table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th scope="col">Feature</th>
+                    <th scope="col">Icon</th>
+                    <th scope="col">Order</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"><span class="visually-hidden">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>
+                        <div class="dash-user">
+                            <div class="dash-avatar" style="background: hsl({{ forloop.counter|add:60 }}deg, 60%, 45%);" aria-hidden="true">
+                                {{ item.title|first|upper }}
+                            </div>
+                            <div class="dash-user-info">
+                                <span class="dash-user-name">{{ item.title }}</span>
+                                <span class="dash-user-email">{{ item.description|truncatechars:50 }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="dash-tag">{{ item.icon|default:"—" }}</span></td>
+                    <td class="dash-mono">{{ item.display_order|default:0 }}</td>
+                    <td>
+                        <button class="status-toggle {% if item.is_active %}active{% endif %}" 
+                                data-url="{% url 'admin_why_us_toggle' item.pk %}"
+                                aria-pressed="{{ item.is_active|yesno:'true,false' }}"></button>
+                    </td>
+                    <td>
+                        <div class="dash-actions">
+                            <a href="{% url 'admin_why_us_edit' item.pk %}" class="dash-action-btn" title="Edit" aria-label="Edit {{ item.title }}">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            </a>
+                            <form method="post" action="{% url 'admin_why_us_delete' item.pk %}" style="display:inline;" onsubmit="return confirm('Delete {{ item.title|escapejs }}?')">
+                                {% csrf_token %}
+                                <button type="submit" class="dash-action-btn dash-action-danger" title="Delete" aria-label="Delete {{ item.title }}">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">
+                        <div class="dash-empty" style="padding: 3rem;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#5A6270" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <p>No features yet. <a href="{% url 'admin_why_us_add' %}" style="color: var(--gold);">Add one</a>.</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

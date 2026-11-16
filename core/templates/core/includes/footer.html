@@ -1,0 +1,111 @@
+
+{% load static %}
+
+<footer class="footer">
+    <div class="footer-grid">
+
+        <!-- Brand / About -->
+        <div class="footer-brand">
+            <a href="{% url 'home' %}" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" fill="none">
+                        <path d="M50 5 L85 30 L85 70 L50 95 L15 70 L15 30 Z"
+                              stroke="#D4AF37" stroke-width="2"/>
+                        <path d="M50 20 L70 35 L70 60 L50 75 L30 60 L30 35 Z"
+                              stroke="#D4AF37" stroke-width="1.5"/>
+                        <path d="M50 35 L60 42 L60 55 L50 62 L40 55 L40 42 Z"
+                              fill="#D4AF37"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    OMAR ADAN
+                    <span>KAMUKUNJI MP</span>
+                </div>
+            </a>
+
+            <p>
+                Together, we can build a better Kamukunji through
+                people-centred leadership, integrity, accountability
+                and meaningful development. Empowering communities,
+                creating opportunities and building a brighter future
+                for every resident.
+            </p>
+
+            <div class="social-links">
+                <a href="#" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                    </svg>
+                </a>
+
+                <a href="#" aria-label="X">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 3h3l-7.5 8.6L22 21h-6.5l-5.1-6.7L4.5 21h-3l8-9.2L2 3h6.7l4.6 6.1L18 3z"/>
+                    </svg>
+                </a>
+
+                <a href="#" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="2" y="2" width="20" height="20" rx="5"/>
+                        <circle cx="12" cy="12" r="4"/>
+                        <circle cx="17.5" cy="6.5" r="1"/>
+                    </svg>
+                </a>
+
+                <a href="#" aria-label="YouTube">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M22 12s0-4-1-5-5-1-9-1-8 0-9 1-1 5-1 5 0 4 1 5 5 1 9 1 8 0 9-1 1-5 1-5z"/>
+                        <path d="m10 9 5 3-5 3z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Our Priorities -->
+        <div class="footer-col">
+            <h4>Our Priorities</h4>
+            <ul>
+                <li><a href="{% url 'home' %}#priorities">Youth Empowerment</a></li>
+                <li><a href="{% url 'home' %}#priorities">Education Development</a></li>
+                <li><a href="{% url 'home' %}#priorities">Business Opportunities</a></li>
+                <li><a href="{% url 'home' %}#priorities">Community Security</a></li>
+                <li><a href="{% url 'home' %}#priorities">Unity and Inclusion</a></li>
+            </ul>
+        </div>
+
+        <!-- About -->
+        <div class="footer-col">
+            <h4>About Us</h4>
+            <ul>
+                <li><a href="{% url 'home' %}#about">About Hon. Omar Adan</a></li>
+                <li><a href="{% url 'home' %}#vision">Our Vision</a></li>
+                <li><a href="{% url 'home' %}#leadership">Leadership Values</a></li>
+                <li><a href="{% url 'home' %}#development">Development Agenda</a></li>
+                <li><a href="{% url 'home' %}#contact">Get Involved</a></li>
+            </ul>
+        </div>
+
+        <!-- Community -->
+        <div class="footer-col">
+            <h4>Our Community</h4>
+            <ul>
+                <li><a href="{% url 'home' %}#wards">Kamukunji Wards</a></li>
+                <li><a href="{% url 'home' %}#youth">Youth Opportunities</a></li>
+                <li><a href="{% url 'home' %}#news">News & Updates</a></li>
+                <li><a href="{% url 'home' %}#events">Community Events</a></li>
+                <li><a href="{% url 'home' %}#contact">Contact Our Office</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+        <p>
+            &copy; {% now "Y" %}
+            {{ settings.site_title|default:"Hon. Omar Adan - Kamukunji MP" }}.
+            All rights reserved.
+            <span>Together for a Better Kamukunji.</span>
+        </p>
+    </div>
+</footer>

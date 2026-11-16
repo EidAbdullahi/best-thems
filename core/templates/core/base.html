@@ -1,0 +1,106 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+
+    <title>{% block page_title %}{{ settings.site_title|default:"Omar Aden" }}{% endblock %} | {{ settings.tagline|default:"Kamukunji Constituency MP Aspirant 2027" }}</title>
+
+    <meta name="description" content="{% block meta_description %}{{ settings.footer_text|default:'Omar Aden – Aspirant for Member of Parliament, Kamukunji Constituency, Nairobi. Follow the campaign, share your views and connect with the community.' }}{% endblock %}">
+
+    <meta name="keywords" content="{% block meta_keywords %}Omar Aden, Kamukunji MP 2027, Kamukunji Constituency, Nairobi, community development, education, youth opportunities{% endblock %}">
+
+    <meta name="author" content="Omar Aden Campaign">
+
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0A0F1A">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}Omar Aden | Kamukunji MP Aspirant 2027{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Connect with Omar Aden's campaign for Kamukunji Constituency, Nairobi.{% endblock %}">
+    <meta property="og:image" content="{% static 'core/images/og-image.jpg' %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Omar Aden | Kamukunji MP Aspirant 2027{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Connect with Omar Aden's campaign for Kamukunji Constituency.{% endblock %}">
+    <meta name="twitter:image" content="{% static 'core/images/og-image.jpg' %}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'core/images/favicon.svg' %}">
+    <link rel="alternate icon" href="{% static 'core/images/favicon.ico' %}">
+    <link rel="apple-touch-icon" href="{% static 'core/images/apple-touch-icon.png' %}">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'core/css/main.css' %}?v={% now 'Ymd' %}">
+
+    {% block extra_css %}{% endblock %}
+
+    <noscript>
+        <style>
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .cursor-dot,
+            .cursor-ring {
+                display: none !important;
+            }
+        </style>
+    </noscript>
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+    <!-- Background -->
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+    <!-- Custom cursor -->
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-ring" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    {% include 'core/includes/navbar.html' %}
+
+    <!-- Main content -->
+    <main id="main-content" role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'core/includes/footer.html' %}
+
+    <!-- Back to top -->
+    <button id="backToTop"
+            class="back-to-top"
+            aria-label="Back to top"
+            title="Back to top">
+        <svg viewBox="0 0 24 24"
+             width="20"
+             height="20"
+             stroke="currentColor"
+             stroke-width="2.5"
+             fill="none"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- Scripts -->
+    <script src="{% static 'core/js/main.js' %}?v={% now 'Ymd' %}" defer></script>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>
